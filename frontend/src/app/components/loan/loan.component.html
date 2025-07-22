@@ -1,0 +1,108 @@
+<div class="container-fluid">
+  <h1 class="h2 mb-4">Loan Management</h1>
+  
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Apply for Loan</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="loanForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="member" class="form-label">Member *</label>
+              <select class="form-select" id="member" formControlName="member_id" required>
+                <option value="">Select active member</option>
+                <option *ngFor="let member of activeMembers" [value]="member.id">
+                  {{ member.first_name }} {{ member.last_name }} - {{ member.microfinance?.name }}
+                </option>
+              </select>
+              <div class="text-danger" *ngIf="loanForm.get('member_id')?.invalid && loanForm.get('member_id')?.touched">
+                Please select a member
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="loanType" class="form-label">Loan Type *</label>
+              <select class="form-select" id="loanType" formControlName="loan_type" required>
+                <option value="">Select loan type</option>
+                <option value="Emergency">Emergency</option>
+                <option value="Development">Development</option>
+                <option value="Business">Business</option>
+                <option value="Education">Education</option>
+              </select>
+              <div class="text-danger" *ngIf="loanForm.get('loan_type')?.invalid && loanForm.get('loan_type')?.touched">
+                Please select a loan type
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="amount" class="form-label">Amount (KSh) *</label>
+              <input type="number" class="form-control" id="amount" formControlName="amount" min="1" required>
+              <div class="text-danger" *ngIf="loanForm.get('amount')?.invalid && loanForm.get('amount')?.touched">
+                Amount must be greater than 0
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="repaymentPeriod" class="form-label">Repayment Period (months) *</label>
+              <input type="number" class="form-control" id="repaymentPeriod" formControlName="repayment_period" min="1" required>
+              <div class="text-danger" *ngIf="loanForm.get('repayment_period')?.invalid && loanForm.get('repayment_period')?.touched">
+                Repayment period must be greater than 0
+              </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" [disabled]="loanForm.invalid || loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+              Submit Loan Application
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Loan Applications</h5>
+        </div>
+        <div class="card-body">
+          <div *ngIf="loans.length === 0" class="text-muted">
+            No loan applications yet
+          </div>
+          
+          <div class="table-responsive" *ngIf="loans.length > 0">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>SACCO</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Period</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let loan of loans">
+                  <td>{{ loan.member?.first_name }} {{ loan.member?.last_name }}</td>
+                  <td>{{ loan.member?.microfinance?.name }}</td>
+                  <td>{{ loan.loan_type }}</td>
+                  <td>KSh {{ loan.amount | number }}</td>
+                  <td>{{ loan.repayment_period }} months</td>
+                  <td>
+                    <span class="badge" [ngClass]="{
+                      'bg-warning': loan.status === 'Pending',
+                      'bg-success': loan.status === 'Approved',
+                      'bg-danger': loan.status === 'Rejected'
+                    }">{{ loan.status }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,129 @@
+<div class="container-fluid">
+  <h1 class="h2 mb-4">Member Management</h1>
+  
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Register New Member</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="memberForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="microfinance" class="form-label">Microfinance *</label>
+              <select class="form-select" id="microfinance" formControlName="microfinance_id" required>
+                <option value="">Select microfinance</option>
+                <option *ngFor="let microfinance of microfinances" [value]="microfinance.id">
+                  {{ microfinance.name }}
+                </option>
+              </select>
+              <div class="text-danger" *ngIf="memberForm.get('microfinance_id')?.invalid && memberForm.get('microfinance_id')?.touched">
+                Please select a microfinance
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="firstName" class="form-label">First Name *</label>
+                <input type="text" class="form-control" id="firstName" formControlName="first_name" required>
+                <div class="text-danger" *ngIf="memberForm.get('first_name')?.invalid && memberForm.get('first_name')?.touched">
+                  First name is required
+                </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label for="lastName" class="form-label">Last Name *</label>
+                <input type="text" class="form-control" id="lastName" formControlName="last_name" required>
+                <div class="text-danger" *ngIf="memberForm.get('last_name')?.invalid && memberForm.get('last_name')?.touched">
+                  Last name is required
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="idNumber" class="form-label">ID Number *</label>
+              <input type="text" class="form-control" id="idNumber" formControlName="id_number" required>
+              <div class="text-danger" *ngIf="memberForm.get('id_number')?.invalid && memberForm.get('id_number')?.touched">
+                ID number is required
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="phone" class="form-label">Phone *</label>
+              <input type="tel" class="form-control" id="phone" formControlName="phone" required>
+              <div class="text-danger" *ngIf="memberForm.get('phone')?.invalid && memberForm.get('phone')?.touched">
+                Phone is required
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="email" class="form-label">Email *</label>
+              <input type="email" class="form-control" id="email" formControlName="email" required>
+              <div class="text-danger" *ngIf="memberForm.get('email')?.invalid && memberForm.get('email')?.touched">
+                Valid email is required
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="address" class="form-label">Address *</label>
+              <input type="text" class="form-control" id="address" formControlName="address" required>
+              <div class="text-danger" *ngIf="memberForm.get('address')?.invalid && memberForm.get('address')?.touched">
+                Address is required
+              </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" [disabled]="memberForm.invalid || loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+              Register Member
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Members List</h5>
+        </div>
+        <div class="card-body">
+          <div *ngIf="members.length === 0" class="text-muted">
+            No members registered yet
+          </div>
+          
+          <div class="table-responsive" *ngIf="members.length > 0">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>SACCO</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let member of members">
+                  <td>{{ member.first_name }} {{ member.last_name }}</td>
+                  <td>{{ member.microfinance?.name }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="{
+                      'bg-warning': member.status === 'Pending',
+                      'bg-success': member.status === 'Active'
+                    }">{{ member.status }}</span>
+                  </td>
+                  <td>
+                    <button *ngIf="member.status === 'Pending'" 
+                            class="btn btn-sm btn-success" 
+                            (click)="activateMember(member.id)"
+                            [disabled]="loading">
+                      Activate
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

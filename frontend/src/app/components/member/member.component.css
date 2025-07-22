@@ -1,0 +1,24 @@
+.table-responsive {
+  overflow-x: auto;
+}
+
+.badge {
+  font-size: 0.875rem;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+.form-select {
+  cursor: pointer;
+}
+
+.table th {
+  border-top: 0;
+}
+
+.card {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
