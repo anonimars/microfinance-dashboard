@@ -1,6 +1,5 @@
 # SACCO Microfinance Admin Panel
 
-A comprehensive Microfinance SACCO (Savings and Credit Cooperative) Admin Management System built with Next.js, TypeScript, and Tailwind CSS. This system allows administrators to manage microfinance SACCOs, register and activate members, and handle loan applications.
 
 ## Features
 
